@@ -1,0 +1,30 @@
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files and logs
+*.log
+*.tmp
+
+# Python cache folders
+__pycache__/
+
+# Local database - exclude until verified safe
+backend/data/faculty360.db

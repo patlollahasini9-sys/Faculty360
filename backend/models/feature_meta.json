@@ -1,0 +1,32 @@
+{
+  "feature_order": [
+    "teaching_effectiveness_score",
+    "course_completion_score",
+    "student_pass_rate_score",
+    "assessment_quality_score",
+    "student_engagement_score",
+    "attendance_regularity_score",
+    "learning_outcome_score",
+    "research_publications_score",
+    "quality_publications_score",
+    "research_projects_score",
+    "patents_ip_score",
+    "conference_participation_score",
+    "research_impact_score",
+    "research_grants_score",
+    "administrative_contribution_score",
+    "student_mentoring_score",
+    "committee_participation_score",
+    "department_activities_score",
+    "institutional_initiatives_score",
+    "quality_accreditation_score",
+    "event_coordination_score",
+    "fdp_score",
+    "professional_certifications_score",
+    "workshops_seminars_score",
+    "industry_interaction_score",
+    "professional_memberships_score",
+    "knowledge_sharing_score",
+    "skill_development_score"
+  ]
+}

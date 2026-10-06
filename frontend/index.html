@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Faculty360 — Smart Faculty Performance Evaluator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="vendor/chart.umd.min.js"></script>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ======================= SIDEBAR ======================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">F360</div>
+      <div class="brand-text">
+        <strong>Faculty360</strong>
+        <span>Performance Evaluator</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-view="dashboard">
+        <span class="nav-dot"></span> Dashboard
+      </button>
+      <button class="nav-item" data-view="evaluate">
+        <span class="nav-dot"></span> Evaluate Faculty
+      </button>
+      <button class="nav-item" data-view="roster">
+        <span class="nav-dot"></span> Faculty Roster
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="weights-title">Scoring Weights</div>
+      <div class="weight-row"><span>Teaching</span><b>40%</b></div>
+      <div class="weight-row"><span>Research</span><b>25%</b></div>
+      <div class="weight-row"><span>Institutional</span><b>20%</b></div>
+      <div class="weight-row"><span>Prof. Dev.</span><b>15%</b></div>
+    </div>
+  </aside>
+
+  <!-- ======================= MAIN ======================= -->
+  <main class="main">
+
+    <!-- ---------- DASHBOARD VIEW ---------- -->
+    <section class="view" id="view-dashboard">
+      <header class="view-head">
+        <div>
+          <h1>Department Overview</h1>
+          <p class="sub">Institution-wide performance across all evaluated faculty.</p>
+        </div>
+        <button class="btn btn-primary" data-goto="evaluate">+ Evaluate Faculty</button>
+      </header>
+
+      <div class="kpi-row" id="kpi-row"><!-- filled by JS --></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Performance Distribution</h3>
+          <div class="dashboard-chart dashboard-chart-small"><canvas id="chart-distribution"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Average Category Scores</h3>
+          <div class="dashboard-chart dashboard-chart-small"><canvas id="chart-avg-category"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Department Comparison</h3>
+        <div class="dashboard-chart dashboard-chart-wide"><canvas id="chart-dept"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="dashboard-section-head">
+          <div>
+            <h3>Department Category Breakdown</h3>
+            <p class="dashboard-insight" id="department-low-category">Loading department scores...</p>
+          </div>
+          <label class="dashboard-filter">Department
+            <select id="dashboard-dept-filter"></select>
+          </label>
+        </div>
+        <div class="dashboard-chart dashboard-chart-focus"><canvas id="chart-dept-category"></canvas></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Top Performers</h3>
+          <div class="mini-list" id="top-performers"></div>
+        </div>
+        <div class="card">
+          <h3>Needs Attention</h3>
+          <div class="mini-list" id="bottom-performers"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- EVALUATE VIEW ---------- -->
+    <section class="view hidden" id="view-evaluate">
+      <header class="view-head">
+        <div>
+          <h1>Evaluate a Faculty Member</h1>
+          <p class="sub">Enter raw metrics for one semester. The score, category and recommendations are computed instantly.</p>
+        </div>
+      </header>
+
+      <div class="eval-layout">
+        <form id="eval-form" class="card form-card">
+          <div class="form-row">
+            <label>Faculty ID <span class="req">*</span>
+              <input type="text" name="faculty_id" required placeholder="e.g. FAC101" />
+            </label>
+            <label>Faculty Name
+              <input type="text" name="faculty_name" placeholder="e.g. Dr. A. Sharma" />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Department <span class="req">*</span>
+              <select name="department" required id="dept-select"></select>
+            </label>
+            <label>Experience (Years)
+              <input type="number" name="experience_years" min="0" max="45" step="1" />
+            </label>
+            <label>Semester / Period
+              <input type="text" name="semester" placeholder="e.g. 2026-S1" />
+            </label>
+          </div>
+
+          <div id="dynamic-sections"><!-- filled from /api/form-schema --></div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg">Compute Evaluation</button>
+            <span class="form-status" id="form-status"></span>
+          </div>
+        </form>
+
+        <div class="result-panel" id="result-panel">
+          <div class="result-placeholder">
+            <p>Fill in the form and submit to see the score breakdown, AI cross-check, and recommendations here.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- ROSTER VIEW ---------- -->
+    <section class="view hidden" id="view-roster">
+      <header class="view-head">
+        <div>
+          <h1>Faculty Roster</h1>
+          <p class="sub">Latest evaluation on record for each faculty member.</p>
+        </div>
+        <select id="roster-dept-filter"></select>
+      </header>
+      <div class="card">
+        <table class="table" id="roster-table">
+          <thead>
+            <tr>
+              <th>Faculty</th><th>Dept.</th><th>Teaching</th><th>Research</th>
+              <th>Institutional</th><th>Prof. Dev.</th><th>Overall</th><th>Category</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="roster-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- FACULTY DETAIL VIEW ---------- -->
+    <section class="view hidden" id="view-detail">
+      <header class="view-head">
+        <div>
+          <button class="btn btn-ghost" id="back-to-roster">&larr; Back to Roster</button>
+          <h1 id="detail-name">Faculty Detail</h1>
+          <p class="sub" id="detail-sub"></p>
+        </div>
+      </header>
+      <div class="detail-layout">
+        <div class="card">
+          <h3>Category Radar</h3>
+          <canvas id="chart-radar" height="260"></canvas>
+        </div>
+        <div class="card">
+          <h3>Score Trend</h3>
+          <canvas id="chart-trend" height="260"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Recommendations</h3>
+        <div id="detail-recommendations" class="reco-list"></div>
+      </div>
+    </section>
+
+    <!-- ---------- VALIDATION VIEW ---------- -->
+    <section class="view hidden" id="view-validation">
+      <header class="view-head">
+        <div>
+          <h1>Model Validation</h1>
+          <p class="sub">How we know the scores are accurate — engine validation + ML cross-check metrics.</p>
+        </div>
+      </header>
+      <div id="validation-content"></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

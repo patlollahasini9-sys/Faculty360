@@ -1,0 +1,102 @@
+{
+  "generated_at": "2026-09-11T08:04:03.027037+00:00",
+  "scoring_engine": {
+    "n": 600,
+    "overall_score_mae": 0.004116666666666777,
+    "overall_score_max_err": 0.010000000000005116,
+    "category_max_err": {
+      "teaching": 0.020000000000010232,
+      "research": 0.0,
+      "institutional": 0.010000000000005116,
+      "professional_development": 0.010000000000005116
+    },
+    "classification_exact_match_rate": 1.0,
+    "level_mismatches": 0
+  },
+  "regression": {
+    "model_type": "LinearRegression (StandardScaler + LinearRegression, on 28 sub-score features)",
+    "r2": 0.9999997986274975,
+    "mae": 0.004593873997360382,
+    "rmse": 0.005538602806922948,
+    "baseline_mean_predictor_mae": 9.966026805555558,
+    "n_splits": 5
+  },
+  "regression_top_features": [
+    [
+      "research_publications_score",
+      1.631608881559734
+    ],
+    [
+      "research_projects_score",
+      1.262578908856874
+    ],
+    [
+      "quality_publications_score",
+      1.2258553612538376
+    ],
+    [
+      "research_impact_score",
+      1.2150180981879044
+    ],
+    [
+      "research_grants_score",
+      1.156521460410857
+    ],
+    [
+      "teaching_effectiveness_score",
+      1.0032755639674555
+    ],
+    [
+      "student_engagement_score",
+      0.9719251625631503
+    ],
+    [
+      "learning_outcome_score",
+      0.8991107985728003
+    ],
+    [
+      "fdp_score",
+      0.8916482688986082
+    ],
+    [
+      "department_activities_score",
+      0.877635969933373
+    ]
+  ],
+  "classification": {
+    "model_type": "LogisticRegression (StandardScaler + LogisticRegression, C=5.0, on 28 sub-score features)",
+    "accuracy": 0.9683333333333334,
+    "macro_f1": 0.965787665860943,
+    "weighted_f1": 0.9682970635817295,
+    "baseline_majority_class_accuracy": 0.47833333333333333,
+    "confusion_matrix": [
+      [
+        199,
+        3,
+        0
+      ],
+      [
+        5,
+        277,
+        5
+      ],
+      [
+        0,
+        6,
+        105
+      ]
+    ],
+    "confusion_matrix_labels": [
+      "Developing",
+      "Good",
+      "Very Good"
+    ],
+    "class_distribution": {
+      "Good": 287,
+      "Developing": 202,
+      "Very Good": 111
+    },
+    "n_splits": 5,
+    "cv_scheme": "StratifiedKFold (preserves class proportions in every fold)"
+  }
+}
